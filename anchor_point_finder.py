@@ -80,7 +80,6 @@ def search_CBCACONH(nhsqc,nhsqc_directory,hncacb_directory,hncacb,cbcaconh,cbcac
     else:
         number_of_peaks=4
     nitrogen_list=make_search_list(nhsqc,nhsqc_directory)
-    print(number_of_peaks)
     beta_carbon_list=[]
     i_1_beta_carbon_list=[]
     anchor_point_HNCACB_list=[]
@@ -162,8 +161,6 @@ def filter_lists(nhsqc,nhsqc_directory,hncacb_directory,hncacb,cbcaconh,cbcaconh
         for lines2 in HNCACB_list:
             if lines==lines2:
                 filtered_list.append(lines)
-    print(HNCA_list)
-    print(HNCACB_list)
     return filtered_list
 
 def make_CA_CB_lists(values,hnca,hnca_directory,hncacb,hncacb_directory,carbon_tolerance,CB_only_flag):
@@ -262,7 +259,7 @@ def make_COCA_CBCA_lists(values,hnca,hnca_directory,hncacb,hncacb_directory,hnco
     return alpha_carbon_list,beta_carbon_list
 
 
-def search_CA_CB(alpha_carbon_list,beta_carbon_list,values,carbon_tolerance,hnca,hnca_directory,hncacb,hncacb_directory):
+def search_CA_CB(alpha_carbon_list,beta_carbon_list,values,carbon_tolerance,hnca,hnca_directory,hncacb,hncacb_directory,hncoca,hncoca_directory,cbcaconh,cbcaconh_directory):
     counter=-1
     matched_alpha_carbon_list=[]
     matched_beta_carbon_list=[]
@@ -279,6 +276,18 @@ def search_CA_CB(alpha_carbon_list,beta_carbon_list,values,carbon_tolerance,hnca
                 nitrogen_value=lines.strip().split()[1]
                 if values != nitrogen_value and float(alpha_carbon) > (float(alpha_carbons)-carbon_tolerance) and float(alpha_carbon) < (float(alpha_carbons)+carbon_tolerance):
                     matched_alpha_carbon_list.append(nitrogen_value)
+        if hncoca != ():
+            os.chdir(hncoca_directory)
+            with open(hncoca_directory) as hncoca_file:
+                for CA_line in hncoca_file:
+                    if CA_line.split() == []:
+                        continue
+                    if CA_line.split()[0] == 'Assignment':
+                        continue
+                    i_1_alpha_carbon=CA_line.strip().split()[2]
+                    i_1_nitrogen_value=CA_line.strip().split()[1]
+                    if values != i_1_nitrogen_value and float(i_1_alpha_carbon) > (float(alpha_carbons)-carbon_tolerance) and float(i_1_alpha_carbon) < (float(alpha_carbons)+carbon_tolerance):
+                        matched_alpha_carbon_list.append(i_1_nitrogen_value)
         for beta_carbons in beta_carbon_list:
             counter+=1
             with open(hncacb) as HNCACB_file:
@@ -291,6 +300,18 @@ def search_CA_CB(alpha_carbon_list,beta_carbon_list,values,carbon_tolerance,hnca
                     beta_nitrogen_value=line.strip().split()[1]
                     if values != beta_nitrogen_value and  float(beta_carbon) > (float(beta_carbons)-carbon_tolerance) and float(beta_carbon) < (float(beta_carbons)+carbon_tolerance):
                         matched_beta_carbon_list.append(beta_nitrogen_value)
+            if cbcaconh != ():
+                os.chdir(cbcaconh_directory)
+                with open(cbcaconh) as CBCACONH_file:
+                    for CB_line in CBCACONH_file:
+                        if CB_line.split() == []:
+                            continue
+                        if CB_line.split()[0] == 'Assignment':
+                            continue
+                        i_1_beta_carbon=CB_line.split()[2]
+                        i_1_beta_nitrogen_value=CB_line.split()[1]
+                        if values != i_1_beta_nitrogen_value and  float(i_1_beta_carbon) > (float(beta_carbons)-carbon_tolerance) and float(i_1_beta_carbon) < (float(beta_carbons)+carbon_tolerance):
+                            matched_beta_carbon_list.append(i_1_beta_nitrogen_value)
             CA_CB_values[counter].append(f'{alpha_carbons} {beta_carbons}')
             for matches in matched_alpha_carbon_list:
                 if matches in matched_beta_carbon_list:
@@ -333,7 +354,7 @@ def find_i_min_plus_1_matches(nhsqc,nhsqc_directory,hncacb_directory,hncacb,cbca
             else:
                 alpha_carbon_list,beta_carbon_list=make_CA_CB_lists(values,hnca,hnca_directory,hncacb,hncacb_directory,carbon_tolerance,CB_only_flag)
             if len(alpha_carbon_list)+len(beta_carbon_list) == 4:
-                CA_CB_values,CA_CB_matches =search_CA_CB(alpha_carbon_list,beta_carbon_list,values,carbon_tolerance,hnca,hnca_directory,hncacb,hncacb_directory)
+                CA_CB_values,CA_CB_matches =search_CA_CB(alpha_carbon_list,beta_carbon_list,values,carbon_tolerance,hnca,hnca_directory,hncacb,hncacb_directory,hncoca,hncoca_directory,cbcaconh,cbcaconh_directory)
                 for CA_CB,matches in zip(CA_CB_values,CA_CB_matches):
                     if matches != []:
                         new_format=new_format.append({'Label':labels,'i':values,'CA':(" ".join(CA_CB)).split()[0],'CB':(" ".join(CA_CB)).split()[1],'Matches':" ".join(matches)},ignore_index=True)
