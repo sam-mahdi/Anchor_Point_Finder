@@ -29,6 +29,7 @@ V339N-H: 118.545
 ```
 
 ***Run With Matches***
+
 This runs the same as without matches, however it additionally will search the peaklists to find i+1 and i-1 matches for the amide peaks that contain both i and i-1 CA/CBs. 
 
 The purpose of this is, in  many cases you may have both i and i-1 CA/CB pairs, but you won't be able to find any matches in the strip plots. Essentially making this a very poor anchor point. So this program filters the previous file (without matches) by pairs that contain i-1 or i+1 matches. 
