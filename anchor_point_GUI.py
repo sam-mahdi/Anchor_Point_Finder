@@ -163,6 +163,7 @@ def run_without_matches():
         text_area.insert(INSERT, 'Error: HNCACB File Missing, please upload an HNCA file\n')
     else:
         text_area.insert(INSERT, 'Program Start\n Running Anchor Point Finder without Matches\n')
+        root.update_idletasks()
         import anchor_point_finder as apf
         with_strip_plot=False
         apf.find_i_min_plus_1_matches(nhsqc,nhsqc_directory,hncacb_directory,hncacb,cbcaconh,cbcaconh_directory,hnca,hnca_directory,hncoca,hncoca_directory,carbon_tolerance,CB_tolerance,CB_only_flag,filter_CB_flag,with_strip_plot)
@@ -207,6 +208,7 @@ def run_with_matches():
         if CB_tolerance != () and filter_CB_flag.get() == 0:
             text_area.insert(INSERT, 'Warning: CB Tolerance Value is entered, but the box is unchecked\n')
         text_area.insert(INSERT, 'Program Start\n Running Anchor Point Finder with Matches\n')
+        root.update_idletasks()
         import anchor_point_finder as apf
         with_strip_plot=True
         apf.find_i_min_plus_1_matches(nhsqc,nhsqc_directory,hncacb_directory,hncacb,cbcaconh,cbcaconh_directory,hnca,hnca_directory,hncoca,hncoca_directory,carbon_tolerance,CB_tolerance,CB_only_flag,filter_CB_flag,with_strip_plot)
