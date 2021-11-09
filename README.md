@@ -1,4 +1,4 @@
-# Anchor_Point_Finder
+# Anchor_Point_Finder *Program in beta, some features may not always work in all scenarios. 
 This program searches through your peaklists and finds strips that contain both i and i-1 CA and CB peaks. 
 
 These are good anchor points to start when trying to create your sequence chain for assignments. 
