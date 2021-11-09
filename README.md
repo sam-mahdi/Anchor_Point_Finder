@@ -5,7 +5,6 @@ These are good anchor points to start when trying to create your sequence chain 
 
 ***PROGRAM ASSUMES AMIDE BACKBONE CHEMICAL SHIFT IN 2D IS IDENTICAL TO THE AMIDE VALUE IN THE 3D. I.E. Peak at 123.345 in the NHSQC, the CA and CB amide values in the HNCA and HNCACB must be 123.345***
 
-[requires pandas]
 
 There are 2 options to run:
 
